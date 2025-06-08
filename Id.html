@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Números Mágicos com Arthur Leywin</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    background: url('https://images.openai.com/thumbnails/b59ce71a3e468c501f99840ab5dff43b.jpeg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    position: relative;
+  }
+
+  #overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 0;
+  }
+
+  #container {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+  }
+
+  #numbers-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .magic-number {
+    background: rgba(255,255,255,0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    padding: 20px 30px;
+    font-size: 2rem;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s, background 0.2s;
+    color: #000;
+  }
+
+  .magic-number:hover {
+    background: rgba(255,255,255,1);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+  }
+
+  .selected {
+    background: #ff8c8c;
+    color: #900;
+    transform: scale(1.1);
+  }
+
+  button {
+    font-size: 1.2rem;
+    padding: 12px 24px;
+    cursor: pointer;
+    background: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    transition: background 0.3s, transform 0.2s;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    margin-bottom: 20px;
+  }
+
+  button:hover {
+    background: #0056b3;
+    transform: scale(1.05);
+  }
+
+  #history-container {
+    margin-top: 20px;
+    background: rgba(255,255,255,0.8);
+    border-radius: 10px;
+    padding: 10px 20px;
+    color: #000;
+    max-width: 300px;
+    text-align: left;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  }
+
+  #history-container h3 {
+    margin: 0 0 10px 0;
+  }
+
+  #history-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  #history-list li {
+    background: rgba(255,255,255,0.7);
+    margin-bottom: 5px;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+</style>
+</head>
+<body>
+
+<div id="overlay"></div>
+<div id="container">
+  <div id="numbers-container">
+    <div class="magic-number">¹²</div>
+    <div class="magic-number">³⁴</div>
+    <div class="magic-number">⁵⁶</div>
+    <div class="magic-number">⁷⁸</div>
+    <div class="magic-number">⁹⁰</div>
+    <div class="magic-number">⁹⁸</div>
+    <div class="magic-number">⁹⁹</div>
+    <div class="magic-number">¹⁷</div>
+    <div class="magic-number">¹⁵</div>
+    <div class="magic-number">¹³</div>
+    <div class="magic-number">¹⁰</div>
+    <div class="magic-number">⁵³</div>
+    <div class="magic-number">⁵²</div>
+    <div class="magic-number">²³</div>
+    <div class="magic-number">²¹</div>
+  </div>
+
+  <button id="copyBtn">Copiar Número Selecionado</button>
+
+  <div id="history-container">
+    <h3>Histórico de Números:</h3>
+    <ul id="history-list"></ul>
+  </div>
+</div>
+
+<script>
+let selectedElement = null;
+
+// Seleção de número
+document.querySelectorAll('.magic-number').forEach(el => {
+  el.addEventListener('click', () => {
+    if (selectedElement) selectedElement.classList.remove('selected');
+    selectedElement = el;
+    selectedElement.classList.add('selected');
+  });
+});
+
+// Função de copiar
+function copyUsingTextarea(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = 0;
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+
+// Botão de cópia
+document.getElementById('copyBtn').addEventListener('click', () => {
+  if (!selectedElement) {
+    alert('Por favor, selecione um número primeiro!');
+    return;
+  }
+  const number = selectedElement.textContent;
+  copyUsingTextarea(number);
+  alert('Número copiado com sucesso!');
+  addToHistory(number);
+});
+
+// Função para adicionar ao histórico
+function addToHistory(number) {
+  const li = document.createElement('li');
+  li.textContent = number;
+  document.getElementById('history-list').appendChild(li);
+}
+</script>
+
+</body>
+</html>
