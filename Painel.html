@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nexion Recruitment</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0f0f1a;
+      color: #fff;
+    }
+
+    .header {
+      background: linear-gradient(90deg, #a445b2, #d41872);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .panel {
+      padding: 20px;
+    }
+
+    .stats {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background: #1a1a2e;
+      padding: 20px;
+      border-radius: 10px;
+      flex: 1 1 150px;
+      text-align: center;
+    }
+
+    .rank {
+      background: #1f1f3c;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
+    .progress {
+      height: 8px;
+      background: #333;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: #33c3f0;
+      width: 20%;
+    }
+
+    .list {
+      margin-top: 20px;
+    }
+
+    .contact {
+      background: #141426;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    .buttons {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      color: white;
+    }
+
+    .green { background: #28a745; }
+    .blue { background: #007bff; }
+    .red { background: #dc3545; }
+    .gray { background: #6c757d; }
+    .yellow { background: #ffc107; color: #000; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>👑 NEXION RECRUITMENT</h1>
+    <button class="btn gray" onclick="gerarContatos()">Atualizar Lista</button>
+  </div>
+
+  <div class="panel">
+    <div class="stats">
+      <div class="card"><h2>1038</h2><p>Total Enviados</p></div>
+      <div class="card"><h2 id="recrutados">0</h2><p>Recrutados</p></div>
+      <div class="card"><h2 id="recusados">0</h2><p>Recusados</p></div>
+      <div class="card"><h2 id="pendentes">10</h2><p>Pendentes</p></div>
+    </div>
+
+    <div class="rank">
+      <h3>🌍 Terra - Rank Atual</h3>
+      <p><span id="rankProgress">0</span> recrutamentos para Pedra</p>
+      <div class="progress"><div class="progress-bar" id="progress-bar" style="width: 0%;"></div></div>
+    </div>
+
+    <div class="list">
+      <h3>📋 Quadro de Missões</h3>
+      <div id="lista-contatos"></div>
+    </div>
+  </div>
+
+  <script>
+    let recrutados = 0;
+    let recusados = 0;
+
+    function gerarNumeroAleatorio() {
+      const ddd = "351"; // Portugal/Exemplo
+      const numero = Math.floor(900000000 + Math.random() * 99999999);
+      return ddd + numero;
+    }
+
+    function gerarContatos(qtde = 10) {
+      const lista = document.getElementById('lista-contatos');
+      lista.innerHTML = '';
+      document.getElementById("pendentes").innerText = qtde;
+
+      for (let i = 0; i < qtde; i++) {
+        const num = gerarNumeroAleatorio();
+
+        const card = document.createElement('div');
+        card.className = "contact";
+        card.innerHTML = `
+          <p>📱 <b>${num}</b> - há 5 dias</p>
+          <div class="buttons">
+            <a class="btn green" href="https://wa.me/${num}" target="_blank">Chamar</a>
+            <button class="btn blue" onclick="recrutar(this)">Recrutar</button>
+            <button class="btn red" onclick="recusar(this)">Recusar</button>
+            <button class="btn gray" onclick="copiar('${num}')">Copiar</button>
+          </div>
+        `;
+        lista.appendChild(card);
+      }
+    }
+
+    function recrutar(btn) {
+      recrutados++;
+      atualizarContadores();
+      btn.closest(".contact").remove();
+    }
+
+    function recusar(btn) {
+      recusados++;
+      atualizarContadores();
+      btn.closest(".contact").remove();
+    }
+
+    function copiar(num) {
+      navigator.clipboard.writeText(num);
+      alert("Número copiado: " + num);
+    }
+
+    function atualizarContadores() {
+      const restantes = document.querySelectorAll(".contact").length;
+      document.getElementById("recrutados").innerText = recrutados;
+      document.getElementById("recusados").innerText = recusados;
+      document.getElementById("pendentes").innerText = restantes;
+      document.getElementById("rankProgress").innerText = 8 - recrutados;
+      document.getElementById("progress-bar").style.width = `${Math.min((recrutados / 8) * 100, 100)}%`;
+    }
+
+    gerarContatos();
+  </script>
+
+</body>
+</html>
